@@ -325,7 +325,7 @@ export default function ContactUs() {
                     autoComplete="name"
                     value={form.name}
                     onChange={onChange}
-                    placeholder="اسمك الكريم"
+                    placeholder="ادخل اسمك هنا"
                     className={fieldCls}
                   />
                 </Field>
