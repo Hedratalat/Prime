@@ -4,9 +4,8 @@ import { Link, NavLink } from "react-router-dom";
 const links = [
   { label: "من نحن", to: "/about" },
   { label: "خدماتنا", to: "/services" },
-  { label: "الباقات", to: "/packages" },
+  { label: "مشاريعنا", to: "/projects" },
   { label: "شركاء النجاح", to: "/partners" },
-  { label: "تغطيتنا", to: "/coverage" },
 ];
 
 // طاقية الشيف: متتبعة من لوجو الـ PDF (خط واحد متصل + لفة يمين + حزام)

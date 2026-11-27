@@ -1,20 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import {
-  categories,
-  services,
-  packages,
-  PRICE_NOTE,
-} from "../data/servicesData";
-
-/* ------------------------------------------------------------------
-   إعدادات الصفحة
-   الأسعار الفردية في الشيت "مقترحة وتحتاج اعتماد الإدارة".
-   لو لسه مش معتمدة خلّيها false وهيظهر "حسب الطلب" بدل السعر.
-   أسعار الباقات "الأصلية محفوظة" فبتظهر دايمًا.
-------------------------------------------------------------------- */
-const SHOW_SERVICE_PRICES = true;
+import { categories, services, packages } from "../data/servicesData";
 
 /* لون كل تصنيف (كلها من ألوان البراند). نص الكارت الفاتح بيستخدم dark */
 const THEMES = {
@@ -24,7 +11,6 @@ const THEMES = {
     line: "border-white/15",
     num: "text-white/[0.06]",
     icon: "bg-prime-terracotta text-white",
-    sticker: "bg-prime-gold text-prime-dark",
     dot: "bg-prime-dark",
   },
   idea: {
@@ -33,7 +19,6 @@ const THEMES = {
     line: "border-white/25",
     num: "text-white/10",
     icon: "bg-white/20 text-white",
-    sticker: "bg-prime-gold text-prime-dark",
     dot: "bg-prime-terracotta",
   },
   menu: {
@@ -42,7 +27,6 @@ const THEMES = {
     line: "border-white/25",
     num: "text-white/10",
     icon: "bg-white/20 text-white",
-    sticker: "bg-prime-gold text-prime-dark",
     dot: "bg-prime-orange",
   },
   kitchen: {
@@ -51,7 +35,6 @@ const THEMES = {
     line: "border-prime-dark/20",
     num: "text-prime-dark/10",
     icon: "bg-prime-dark text-prime-gold",
-    sticker: "bg-prime-dark text-prime-gold",
     dot: "bg-prime-gold",
   },
   ops: {
@@ -60,7 +43,6 @@ const THEMES = {
     line: "border-white/25",
     num: "text-white/10",
     icon: "bg-white/20 text-white",
-    sticker: "bg-prime-gold text-prime-dark",
     dot: "bg-prime-rust",
   },
   team: {
@@ -69,7 +51,6 @@ const THEMES = {
     line: "border-white/20",
     num: "text-white/[0.07]",
     icon: "bg-prime-gold text-prime-dark",
-    sticker: "bg-prime-gold text-prime-dark",
     dot: "bg-gradient-to-br from-prime-rust to-prime-dark",
   },
   launch: {
@@ -78,7 +59,6 @@ const THEMES = {
     line: "border-prime-dark/20",
     num: "text-prime-dark/10",
     icon: "bg-prime-dark text-white",
-    sticker: "bg-prime-dark text-prime-gold",
     dot: "bg-gradient-to-br from-prime-gold to-prime-terracotta",
   },
 };
@@ -179,7 +159,6 @@ function Icon({ name, className = "h-5 w-5" }) {
   );
 }
 
-const fmt = (n) => n.toLocaleString("en-US");
 const pad = (n) => String(n).padStart(2, "0");
 
 /* توحيد الحروف العربية عشان البحث يلاقي (ة/ه، ى/ي، أ/إ/ا) */
@@ -350,37 +329,6 @@ function Btn({ to, href, variant = "primary", children }) {
   );
 }
 
-/* ستيكر السعر */
-function PriceSticker({ value, unit, cls, big = false }) {
-  const base = `inline-block -rotate-2 rounded-xl text-center shadow-md ${cls} ${
-    big ? "px-5 py-3" : "px-3 py-1.5"
-  }`;
-  if (value === 0) {
-    return <span className={`${base} text-sm font-extrabold`}>مجانًا</span>;
-  }
-  if (value === null) {
-    return <span className={`${base} text-xs font-extrabold`}>حسب الطلب</span>;
-  }
-  return (
-    <span className={base}>
-      <span
-        dir="ltr"
-        className={`font-latin font-extrabold ${big ? "text-3xl" : "text-lg"}`}
-      >
-        {fmt(value)}
-      </span>
-      <span className={`mr-1 font-bold ${big ? "text-sm" : "text-[11px]"}`}>
-        ر.س
-      </span>
-      {unit && (
-        <span className="block text-[10px] font-semibold opacity-80">
-          {unit}
-        </span>
-      )}
-    </span>
-  );
-}
-
 /* ------------------------------------------------------------------
    كارت الخدمة (ملوّن حسب التصنيف)
 ------------------------------------------------------------------- */
@@ -403,11 +351,6 @@ function ServiceCard({ s }) {
         >
           <Icon name={s.category} />
         </span>
-        <PriceSticker
-          value={SHOW_SERVICE_PRICES || s.price === 0 ? s.price : null}
-          unit={s.unit}
-          cls={t.sticker}
-        />
       </div>
 
       <h3 className="relative mt-5 text-lg font-extrabold leading-[1.7]">
@@ -466,10 +409,10 @@ export default function Services() {
   };
 
   const stats = [
-    { to: services.length, label: "خدمة منفردة بنطاق وسعر ومدة واضحة" },
+    { to: services.length, label: "خدمة منفردة بنطاق ومدة تنفيذ واضحة" },
     { to: categories.length, label: "مجالات تشغيلية تغطي رحلة المشروع" },
-    { to: packages.length, label: "باقات جاهزة بحسب مرحلة مشروعك" },
-    { text: "مجانًا", label: "استشارة عند توقيع عقد إحدى الباقات" },
+    { to: packages.length, label: "مسارات جاهزة بحسب مرحلة مشروعك" },
+    { text: "مجانًا", label: "استشارة عند توقيع عقد أحد المسارات" },
   ];
 
   return (
@@ -516,22 +459,22 @@ export default function Services() {
                 <h1 className="max-w-2xl text-3xl font-extrabold leading-[1.5] text-white md:text-5xl md:leading-[1.45]">
                   من الفكرة إلى الافتتاح،
                   <span className="block text-prime-terracotta">
-                    كل خدمة بنطاق وسعر واضح
+                    كل خدمة بنطاق ومدة واضحة
                   </span>
                 </h1>
               </Reveal>
               <Reveal delay={240}>
                 <p className="mt-5 max-w-xl text-base leading-[2.1] text-white/80 md:text-lg">
                   {services.length} خدمة في {categories.length} مجالات تشغيلية.
-                  اختر ما يحتاجه مشروعك من الخدمات المنفردة، أو ابدأ بباقة جاهزة
-                  تجمع لك ما يلزم.
+                  اختر ما يحتاجه مشروعك من الخدمات المنفردة، أو ابدأ بمسار جاهز
+                  يجمع لك ما يلزم.
                 </p>
               </Reveal>
               <Reveal delay={360}>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Btn href="#all-services">استعرض الخدمات</Btn>
                   <Btn href="#packages" variant="ghost">
-                    شاهد الباقات
+                    شاهد المسارات
                   </Btn>
                 </div>
               </Reveal>
@@ -605,7 +548,7 @@ export default function Services() {
           </Reveal>
         </div>
 
-        {/* ============ خدمة منفردة أو باقة؟ ============ */}
+        {/* ============ خدمة منفردة أو مسار؟ ============ */}
         <div className="mx-auto mt-24 max-w-6xl px-6 lg:px-10">
           <Reveal>
             <Eyebrow>Two ways to work with us</Eyebrow>
@@ -625,8 +568,8 @@ export default function Services() {
                   خدمة منفردة
                 </h3>
                 <p className="relative mt-3 flex-1 text-sm leading-[2.1] text-white md:text-base">
-                  تعرف بالضبط ما تحتاجه؟ اختر خدمة أو أكثر، لكل منها نطاق وسعر
-                  ومدة تنفيذ، وادفع مقابل ما تحتاجه فقط.
+                  تعرف بالضبط ما تحتاجه؟ اختر خدمة أو أكثر، لكل منها نطاق ومدة
+                  تنفيذ واضحة، وتطلب ما تحتاجه فقط.
                 </p>
                 <a
                   href="#all-services"
@@ -647,17 +590,17 @@ export default function Services() {
                   02
                 </span>
                 <h3 className="relative text-xl font-extrabold md:text-2xl">
-                  باقة جاهزة
+                  مسار جاهز
                 </h3>
                 <p className="relative mt-3 flex-1 text-sm leading-[2.1] text-white/85 md:text-base">
-                  لست متأكدًا من أين تبدأ؟ كل باقة تجمع الخدمات المناسبة لمرحلة
-                  معينة من مشروعك بسعر ومدة وزيارات محددة.
+                  لست متأكدًا من أين تبدأ؟ كل مسار يجمع الخدمات المناسبة لمرحلة
+                  معينة من مشروعك بمدة وزيارات محددة.
                 </p>
                 <a
                   href="#packages"
                   className="relative mt-6 inline-flex items-center gap-2 self-start font-bold text-prime-gold underline-offset-8 hover:underline"
                 >
-                  قارن الباقات الـ {packages.length}
+                  قارن المسارات الـ {packages.length}
                   <Icon name="arrow" className="h-5 w-5" />
                 </a>
               </article>
@@ -776,15 +719,9 @@ export default function Services() {
               </section>
             ))}
           </div>
-
-          <Reveal>
-            <p className="mt-10 text-sm leading-[2] text-prime-dark/70">
-              * {PRICE_NOTE}
-            </p>
-          </Reveal>
         </div>
 
-        {/* ============ الباقات ============ */}
+        {/* ============ المسارات ============ */}
         <div
           id="packages"
           className="relative mt-24 scroll-mt-16 overflow-hidden bg-gradient-to-l from-prime-orange to-prime-terracotta py-20 text-white lg:py-28"
@@ -801,18 +738,18 @@ export default function Services() {
           <div className="relative mx-auto max-w-6xl px-6 lg:px-10">
             <Reveal>
               <Eyebrow onGradient>Ready-made packages</Eyebrow>
-              <SectionTitle light>الباقات الجاهزة</SectionTitle>
+              <SectionTitle light>المسارات الجاهزة</SectionTitle>
               <p className="max-w-xl text-sm leading-[2.1] text-white md:text-base">
-                كل باقة تجمع عدة خدمات بسعر ثابت ومدة محددة. اختر باقة لتعرف ما
-                تشمله وما يناسب مرحلة مشروعك.
+                كل مسار يجمع عدة خدمات بمدة محددة. اختر مسارًا لتعرف ما يشمله
+                وما يناسب مرحلة مشروعك.
               </p>
             </Reveal>
 
-            {/* تبويبات الباقات */}
+            {/* تبويبات المسارات */}
             <Reveal delay={120}>
               <div
                 role="tablist"
-                aria-label="الباقات"
+                aria-label="المسارات"
                 className="prime-hide-scroll -mx-6 mt-10 flex gap-3 overflow-x-auto px-6 pb-3 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0"
               >
                 {packages.map((p) => {
@@ -833,21 +770,13 @@ export default function Services() {
                       <span className="text-sm font-extrabold md:text-base">
                         {p.short}
                       </span>
-                      <span
-                        className={`mt-1 text-xs font-bold ${on ? "text-prime-terracotta" : "text-white/85"}`}
-                      >
-                        <span dir="ltr" className="font-latin">
-                          {fmt(p.price)}
-                        </span>{" "}
-                        ر.س
-                      </span>
                     </button>
                   );
                 })}
               </div>
             </Reveal>
 
-            {/* تفاصيل الباقة */}
+            {/* تفاصيل المسار */}
             <div
               key={pkg.id}
               role="tabpanel"
@@ -865,13 +794,6 @@ export default function Services() {
                     </span>
                     {pkg.forWho}
                   </p>
-                </div>
-                <div className="shrink-0 md:pt-2">
-                  <PriceSticker
-                    value={pkg.price}
-                    cls="bg-prime-gold text-prime-dark"
-                    big
-                  />
                 </div>
               </div>
 
@@ -904,7 +826,7 @@ export default function Services() {
                 ))}
               </div>
 
-              <h4 className="mt-10 text-lg font-extrabold">ما تشمله الباقة</h4>
+              <h4 className="mt-10 text-lg font-extrabold">ما يشمله المسار</h4>
               <ul className="mt-4 grid gap-x-8 gap-y-1 md:grid-cols-2">
                 {pkg.features.map((f) => (
                   <li
@@ -938,10 +860,7 @@ export default function Services() {
               </ul>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Btn to="/contact">اطلب هذه الباقة</Btn>
-                <p className="text-xs leading-[2] text-prime-dark/65">
-                  {PRICE_NOTE}
-                </p>
+                <Btn to="/contact">اطلب هذا المسار</Btn>
               </div>
             </div>
           </div>
@@ -963,8 +882,8 @@ export default function Services() {
                 لست متأكدًا من الخدمة المناسبة؟
               </h2>
               <p className="relative mx-auto mt-4 max-w-xl text-sm leading-[2.1] text-white/85 md:text-base">
-                احكِ لنا عن مشروعك ونرشّح لك الخدمة أو الباقة الأنسب. وعند توقيع
-                عقد إحدى الباقات تحصل على استشارة مجانية لمدة ساعتين.
+                احكِ لنا عن مشروعك ونرشّح لك الخدمة أو المسار الأنسب. وعند توقيع
+                عقد أحد المسارات تحصل على استشارة مجانية لمدة ساعتين.
               </p>
               <div className="relative mt-8">
                 <Btn to="/contact">تواصل معنا</Btn>
